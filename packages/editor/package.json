@@ -21,6 +21,7 @@
     "three": "^0.183"
   },
   "dependencies": {
+    "ai": "^4.3.16",
     "@iconify/react": "^6.0.2",
     "@number-flow/react": "^0.5.14",
     "@radix-ui/react-alert-dialog": "^1.1.15",

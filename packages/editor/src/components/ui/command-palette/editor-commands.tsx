@@ -26,6 +26,7 @@ import {
   PencilLine,
   Plus,
   Redo2,
+  Sparkles,
   Square,
   SquareStack,
   Sun,
@@ -375,6 +376,30 @@ export function EditorCommands() {
               href: canvas.toDataURL('image/png'),
               download: `screenshot_${new Date().toISOString().split('T')[0]}.png`,
             }).click()
+          }),
+      },
+
+      // ── AI ──────────────────────────────────────────────────────────────
+      {
+        id: 'editor.ai.chat',
+        label: 'AI Assistant',
+        group: 'AI',
+        icon: <Sparkles className="h-4 w-4" />,
+        keywords: ['ai', 'chat', 'assistant', 'generate', 'create', 'build', 'agent'],
+        execute: () =>
+          run(() => {
+            useEditor.getState().setActiveSidebarPanel('ai')
+          }),
+      },
+      {
+        id: 'editor.ai.describe-scene',
+        label: 'AI: Describe Scene',
+        group: 'AI',
+        icon: <Sparkles className="h-4 w-4" />,
+        keywords: ['ai', 'describe', 'scene', 'analyze'],
+        execute: () =>
+          run(() => {
+            useEditor.getState().setActiveSidebarPanel('ai')
           }),
       },
     ])

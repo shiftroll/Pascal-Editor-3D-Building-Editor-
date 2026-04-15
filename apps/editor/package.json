@@ -11,10 +11,12 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^1.2.12",
     "@number-flow/react": "^0.5.14",
     "@pascal-app/core": "*",
     "@pascal-app/editor": "*",
     "@pascal-app/viewer": "*",
+    "ai": "^4.3.16",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@tailwindcss/postcss": "^4.2.1",

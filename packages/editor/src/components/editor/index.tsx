@@ -8,7 +8,8 @@ import {
   useScene,
 } from '@pascal-app/core'
 import { InteractiveSystem, useViewer, Viewer } from '@pascal-app/viewer'
-import { memo, type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { Sparkles } from 'lucide-react'
+import { memo, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ViewerOverlay } from '../../components/viewer-overlay'
 import { ViewerZoneSystem } from '../../components/viewer-zone-system'
 import { type PresetsAdapter, PresetsProvider } from '../../contexts/presets-context'
@@ -57,6 +58,7 @@ import { SelectionManager } from './selection-manager'
 import { SiteEdgeLabels } from './site-edge-labels'
 import { type SnapshotCameraData, ThumbnailGenerator } from './thumbnail-generator'
 import { WallMeasurementLabel } from './wall-measurement-label'
+import { AIPanel } from '../ui/sidebar/panels/ai-panel'
 
 const CAMERA_CONTROLS_HINT_DISMISSED_STORAGE_KEY = 'editor-camera-controls-hint-dismissed:v1'
 const DELETE_CURSOR_BADGE_COLOR = '#ef4444'
@@ -729,6 +731,17 @@ export default function Editor({
   presetsAdapter,
   commandPaletteEmptyAction,
 }: EditorProps) {
+  // Merge the built-in AI panel with any extra panels from the host app
+  const allExtraPanels = useMemo<ExtraPanel[]>(() => {
+    const aiPanel: ExtraPanel = {
+      id: 'ai',
+      icon: <Sparkles className="h-4 w-4" />,
+      label: 'AI Assistant',
+      component: AIPanel,
+    }
+    return [aiPanel, ...(extraSidebarPanels ?? [])]
+  }, [extraSidebarPanels])
+
   useKeyboard({ isVersionPreviewMode })
 
   const { isLoadingSceneRef } = useAutoSave({
@@ -857,6 +870,9 @@ export default function Editor({
       if (tabId === 'settings') {
         return <SettingsPanel {...settingsPanelProps} />
       }
+      if (tabId === 'ai') {
+        return <AIPanel />
+      }
       // External tabs (AI chat, catalog, etc.)
       const tab = tabMap.get(tabId)
       if (!tab) return null
@@ -864,7 +880,10 @@ export default function Editor({
       return <Component />
     }
 
-    const tabBarTabs = sidebarTabs?.map(({ id, label }) => ({ id, label })) ?? []
+    const tabBarTabs = [
+      ...(sidebarTabs?.map(({ id, label }) => ({ id, label })) ?? []),
+      { id: 'ai', label: 'AI' },
+    ]
 
     return (
       <PresetsProvider adapter={presetsAdapter}>
@@ -950,7 +969,7 @@ export default function Editor({
               <AppSidebar
                 appMenuButton={appMenuButton}
                 commandPaletteEmptyAction={commandPaletteEmptyAction}
-                extraPanels={extraSidebarPanels}
+                extraPanels={allExtraPanels}
                 settingsPanelProps={settingsPanelProps}
                 sidebarTop={sidebarTop}
                 sitePanelProps={sitePanelProps}

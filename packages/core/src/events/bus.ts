@@ -109,6 +109,14 @@ type ThumbnailEvents = {
   'thumbnail:after-capture': undefined
 }
 
+type AIEvents = {
+  'ai:action-start': { toolName: string; args: Record<string, unknown> }
+  'ai:action-complete': { toolName: string; result: string }
+  'ai:render-start': { mode: string }
+  'ai:render-complete': { mode: string }
+  'ai:error': { message: string }
+}
+
 type EditorEvents = GridEvents &
   NodeEvents<'wall', WallEvent> &
   NodeEvents<'item', ItemEvent> &
@@ -127,6 +135,7 @@ type EditorEvents = GridEvents &
   CameraControlEvents &
   ToolEvents &
   PresetEvents &
-  ThumbnailEvents
+  ThumbnailEvents &
+  AIEvents
 
 export const emitter = mitt<EditorEvents>()
